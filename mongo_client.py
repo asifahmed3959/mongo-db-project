@@ -41,6 +41,11 @@ def update_multiple_fields_of_a_document(id, key_value_pairs):
     collection.update_one({"_id": id}, {"$set": key_value_pairs})
 
 
+# === remove the field defined from all the rows ====
+def remove_specific_field_from_all_rows(key):
+    collection.update({}, {"$unset": {key:""} } , {"multi": True})
+
+
 # === add one to phone number after 017 ===
 def add_one_to_phone_number(phone_number): #0172233667
     if phone_number is None:
@@ -96,6 +101,7 @@ def iterate_rows():
             'last_name' : last_name
         }
         update_multiple_fields_of_a_document(id=x['_id'], key_value_pairs=data)
+        remove_specific_field_from_all_rows('name')
 
 
 def main():
