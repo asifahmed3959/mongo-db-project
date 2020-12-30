@@ -6,7 +6,7 @@ from random import randint
 
 # connect to db
 client = pymongo.MongoClient(
-    "mongodb+srv://*********:********@cluster0.ovfat.mongodb.net/cse716?retryWrites=true&w=majority")
+    "mongodb+srv://*****:****@cluster0.ovfat.mongodb.net/cse716?retryWrites=true&w=majority")
 db = client.cse716
 collection = db["collection1"]
 
@@ -43,7 +43,7 @@ def update_multiple_fields_of_a_document(id, key_value_pairs):
 
 # === remove the field defined from all the rows ====
 def remove_specific_field_from_all_rows(key):
-    collection.update({}, {"$unset": {key:""} } , {"multi": True})
+    collection.update({}, {"$unset": {key:""} } , multi=True)
 
 
 # === add one to phone number after 017 ===
@@ -93,15 +93,20 @@ def faker_():
 # iterate through the objects and update them
 def iterate_rows():
     for x in collection.find():
+        print(x)
         new_phone_number=add_one_to_phone_number(x['phone'])
         first_name, last_name = split_name(x['name'])
+        print(new_phone_number)
+        print(first_name, last_name)
         data = {
             'phone' : new_phone_number,
             'first_name' : first_name,
             'last_name' : last_name
         }
         update_multiple_fields_of_a_document(id=x['_id'], key_value_pairs=data)
-        remove_specific_field_from_all_rows('name')
+
+    remove_specific_field_from_all_rows('name')
+
 
 
 def main():
@@ -112,7 +117,7 @@ def main():
     # retrieve(key, value)
     # insert_n(5)
     get_count()
-    # iterate_rows()
+    iterate_rows()
     client.close()
 
 
